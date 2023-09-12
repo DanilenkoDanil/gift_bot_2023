@@ -72,6 +72,8 @@ class CheckFriendAPIView(generics.RetrieveAPIView):
             key.save()
             return Response(f"Error", status=status.HTTP_200_OK)
 
+        key.account.counter += 1
+        key.account.save()
         main_gift_send(
             key.account.login,
             key.account.password,
@@ -139,7 +141,7 @@ class SendGiftAPIView(generics.RetrieveAPIView):
                     account=account
                 )
                 try:
-                    # main_friend_add(account.login, account.password, '', info['username'], code)
+                    main_friend_add(account.login, account.password, '', info['username'], code)
                     code_obj.status = "Ссылка заменена, ожидаем ответа на запрос в друзья..."
                     code_obj.save()
                     image_link = convert_game_link_game_img(game.game_link)
