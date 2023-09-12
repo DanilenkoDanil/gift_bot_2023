@@ -1,15 +1,11 @@
 import time
 import random
-import chromedriver_autoinstaller
-
 from send_gift.models import get_key
-# import undetected_chromedriver.v2 as uc
 
 from selenium.common.exceptions import NoSuchElementException, ElementNotInteractableException
 from seleniumwire import webdriver
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.common.by import By
-# from pyvirtualdisplay import Display
 from webdriver_manager.chrome import ChromeDriverManager
 from background_task import background
 
@@ -137,9 +133,6 @@ def gift_game(driver, game_link, sub_id, friend_name):
 
 
 def check_gift_status(login: str, password: str, shared_secret: str, proxy: str, nickname: str, game_name: str):
-    #display = Display(visible=0, size=(1920, 1080))
-    #display.start()
-
     print('!!!!!!!!!!!!!!!!!!!!')
     print('Прокси тут')
     print(proxy)
@@ -153,6 +146,7 @@ def check_gift_status(login: str, password: str, shared_secret: str, proxy: str,
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
     chrome_options.add_argument('--proxy-server=%s' % proxy)
+    chrome_options.add_argument('--headless')
     driver = webdriver.Chrome(chrome_options=chrome_options)
     try:
         steam_login(driver, login, password, shared_secret)
@@ -174,26 +168,20 @@ def check_gift_status(login: str, password: str, shared_secret: str, proxy: str,
             if nickname in status_area.find_element(By.TAG_NAME, 'a').text and game_name in i.text:
                 if 'Redeemed' in i.text:
                     driver.quit()
-                    # display.stop()
                     return 'Received'
                 elif 'Sent' in i.text:
                     driver.quit()
-                    # display.stop()
                     return 'Submitted'
     except Exception as e:
         print(e)
         driver.quit()
-        # display.stop()
         return 'Error'
     driver.quit()
-    # display.stop()
     return 'Rejected'
 
 
 @background()
 def main_gift_send(login, password, target_name, game_link, sub_id, proxy, target_link, code):
-    #display = Display(visible=0, size=(1920, 1080))
-    #display.start()
     code_obj = get_key(code)
     print('!!!!!!!!!!!!!!!!!!!!')
     print('Прокси тут')
@@ -208,6 +196,7 @@ def main_gift_send(login, password, target_name, game_link, sub_id, proxy, targe
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
     chrome_options.add_argument('--proxy-server=%s' % proxy)
+    chrome_options.add_argument('--headless')
     driver = webdriver.Chrome(ChromeDriverManager().install(), chrome_options=chrome_options)
     try:
         steam_login(driver, login, password)
@@ -220,25 +209,22 @@ def main_gift_send(login, password, target_name, game_link, sub_id, proxy, targe
         except Exception as e:
             print(e)
             driver.quit()
-            # display.stop()
             return 'Error Remove'
     except Exception as e:
         print(e)
         driver.quit()
         code_obj.status = "Ошибка, обратитесь к продавцу!"
         code_obj.save()
-        # display.stop()
         return 'Error'
     driver.quit()
 
 
 @background()
 def main_friend_add(login: str, password: str,  proxy: str, target_link: str, code):
-    #display = Display(visible=0, size=(1920, 1080))
-    #display.start()
     print('start')
     code_obj = get_key(code)
     chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument('--headless')
     chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
     # chrome_options.add_argument('--proxy-server=%s' % proxy)
     driver = webdriver.Chrome(ChromeDriverManager().install(), chrome_options=chrome_options)
@@ -254,11 +240,9 @@ def main_friend_add(login: str, password: str,  proxy: str, target_link: str, co
         driver.quit()
         code_obj.status = "Ссылка некорректна ожидаем замены"
         code_obj.save()
-        # display.stop()
         return 'Error'
 
     driver.quit()
-    # display.stop()
 
 
 # check_gift_status('raibartinar1970', 'LHtsrneGns1976', '6772uh:WHd7M4@5.101.83.130:8000', 'enormously', 'SUPERHOT VR')
