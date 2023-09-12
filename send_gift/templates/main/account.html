@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>SteamGift</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script>
+			function autoRefresh() {
+				location.reload();
+			}
+
+			setInterval(autoRefresh, 60000);
+
+			function sendGetRequest(endpoint) {
+				const currentUrl = window.location.hostname;
+				const urlParams = new URLSearchParams(window.location.search);
+				const uniquecode = urlParams.get('uniquecode'); // Получаем значение из параметра uniquecode в адресной строке
+
+				let requestUrl = 'http://' + currentUrl + ':8000/bot/' + endpoint;
+
+				if (requestUrl.includes('?')) {
+					// Если в адресной строке уже есть параметры, добавляем & перед uniquecode
+					requestUrl += '&' + 'uniquecode=' + uniquecode;
+				} else {
+					// Иначе добавляем ? перед uniquecode
+					requestUrl += '?' + 'uniquecode=' + uniquecode;
+				}
+
+				fetch(requestUrl)
+					.then(response => response.json())
+					.then(data => {
+						console.log(data);
+					})
+					.catch(error => {
+						console.error('Ошибка при выполнении GET-запроса:', error);
+					});
+			}
+
+			function showInputDialog() {
+				const inputDialog = document.getElementById('inputDialog');
+				inputDialog.style.display = 'block';
+			}
+
+			function hideButtons() {
+				const status = document.querySelector('.status').textContent.toLowerCase().trim();
+				const buttons = document.querySelectorAll('.product__info button');
+
+				if (!status.includes('ожидаем')) {
+					buttons.forEach(button => {
+						button.style.display = 'none';
+					});
+				}
+			}
+
+			function submitInput() {
+				const inputValue = document.getElementById('inputValue').value;
+				const inputDialog = document.getElementById('inputDialog');
+				inputDialog.style.display = 'none';
+
+				// Добавьте значение inputValue как параметр ко второму запросу
+				const endpoint = 'change-link?link=' + inputValue;
+				sendGetRequest(endpoint);
+			}
+		</script>
+		<style type="text/css">
+			*,
+			*::before,
+			*::after {
+				box-sizing: border-box;
+			}
+
+			body {
+				padding: 0;
+				margin: 0;
+				font-family: system-ui, -apple-system, "Segoe UI", Roboto,
+					"Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
+					"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+					"Noto Color Emoji";
+				height: 100vh;
+				position: relative;
+			}
+
+			h1,
+			h2,
+			h3,
+			h4,
+			h5,
+			h6 {
+				margin: 0;
+			}
+
+			.container {
+				max-width: 1630px;
+				padding: 0 15px;
+				margin: 0 auto;
+			}
+
+			.header {
+				border-bottom: 1px solid #dee2e6;
+				margin-bottom: 40px;
+			}
+
+			.header__content {
+				padding: 17px 0;
+			}
+
+			.header__title {
+				font-size: 25px;
+				font-weight: 400;
+			}
+
+			.main {
+				display: flex;
+				justify-content: center;
+				padding: 0 5px;
+			}
+
+			.product {
+				background-image: #fff;
+				border-radius: 10px;
+				overflow: hidden;
+				border: 1px solid #dedede;
+			}
+
+			.product__img {
+				max-width: 100%;
+				height: auto;
+				object-fit: cover;
+			}
+
+			div.code{
+				text-align: center;
+			}
+
+			.product__info {
+				padding: 10px 15px;
+				border-bottom: 1px solid #dedede;
+			}
+
+			.product__info:last-child {
+				border: none;
+				padding: 15px 15px;
+			}
+
+			.product__row span {
+				color: inherit;
+				font-weight: 400;
+				font-size: 17px;
+			}
+
+			.product__bold {
+				font-weight: 700 !important;
+			}
+
+			.product__copy {
+				text-decoration: underline;
+				cursor: pointer;
+			}
+
+			.product__btn {
+				width: 100%;
+				border-radius: 10px;
+				border: 1px solid #dedede;
+				background-color: transparent;
+				cursor: pointer;
+				padding: 10px 15px;
+				transition: all 0.3s linear;
+			}
+
+			.product__btn:hover {
+				border: 1px solid #000;
+				background-color: #000;
+				color: #fff;
+			}
+
+			.copy__alert {
+				background-color: #198754;
+				width: 200px;
+				border-radius: 0 0 10px 10px;
+				color: #fff;
+				text-align: center;
+				padding: 10px 0;
+				font-weight: 700;
+
+				position: absolute;
+				top: 0;
+				left: 50%;
+				transform: translate(-50%, -100%);
+				transition: all 0.2s linear;
+			}
+
+			.copy__alert.show {
+				transform: translate(-50%, 0);
+			}
+
+			@media (max-width: 480px) {
+				.product__row span {
+					font-size: 15px;
+				}
+				.product__info {
+					padding: 10px 0 10px 5px;
+				}
+			}
+					/* Улучшенный стиль кнопок */
+			.product__info button {
+				width: 100%;
+				border-radius: 10px;
+				border: 1px solid #dedede;
+				background-color: transparent;
+				cursor: pointer;
+				padding: 10px 15px;
+				transition: all 0.3s linear;
+				margin-top: 10px;
+			}
+
+			.product__info button:hover {
+				border: 1px solid #000;
+				background-color: #000;
+				color: #fff;
+			}
+
+			/* Стиль для всплывающего окна */
+			#inputDialog {
+				display: none;
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background: rgba(0, 0, 0, 0.5);
+				justify-content: center;
+				align-items: center;
+			}
+
+			#inputBox {
+				background: #fff;
+				padding: 20px;
+				border-radius: 10px;
+				box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+			}
+
+			#inputBox input {
+				width: 100%;
+				padding: 10px;
+				margin-bottom: 10px;
+			}
+
+			#inputBox button {
+				background-color: #000;
+				color: #fff;
+				border: none;
+				padding: 10px 20px;
+				border-radius: 5px;
+				cursor: pointer;
+			}
+		</style>
+	</head>
+	<body>
+		<header class="header">
+			<div class="container">
+				<div class="header__content">
+					<h1 class="header__title">SteamGift</h1>
+				</div>
+			</div>
+		</header>
+		<main class="main">
+			<div class="product">
+				<img class="product__img" src="{{image_link}}">
+				<div class="product__info">
+					<div class="product__row">
+						<span class="product__bold">Unique Product Code :</span> &nbsp;
+						<span class="product__copy">{{ code }}</span>
+					</div>
+				</div>
+				<div class="product__info">
+					<div class="product__row">
+						<span class="product__bold">Account Link :</span> &nbsp;
+						<span class="login">{{ login }}</span>
+					</div>
+					<div class="product__row">
+						<span class="product__bold">Game :</span> &nbsp;
+						<span class="password">{{ game_name }}</span>
+					</div>
+				</div>
+				<div class="product__info">
+					<div class="product__row">
+						<span class="product__bold">Status :</span> &nbsp;
+						<span class="login status">{{ status }}</span>
+					</div>
+				</div>
+				<div class="product__info">
+					<div class="product__row">
+						<button onclick="sendGetRequest('check-friend')">Бот у меня в друзьях!</button>
+						<button onclick="showInputDialog()">Я не правильно указал ссылку</button>
+					</div>
+				</div>
+			</div>
+		</main>
+		<div id="inputDialog">
+			<div id="inputBox">
+				<label for="inputValue">Введите корректную ссылку:</label>
+				<input type="text" id="inputValue">
+				<button onclick="submitInput()">Отправить</button>
+			</div>
+		</div>
+		<div class="copy__alert">
+			<p class="copy__alert-text">Текст скопирован</p>
+		</div>
+		<script>
+			hideButtons();
+		</script>
+	</body>
+</html>

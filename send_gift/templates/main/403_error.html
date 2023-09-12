@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SteamGift</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script>
+        setInterval(function() {
+            location.reload();
+        }, 5000);
+    </script>
+    <style type="text/css">
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            padding: 0;
+            margin: 0;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto,
+                "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
+                "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+                "Noto Color Emoji";
+            height: 100vh;
+            position: relative;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1630px;
+            padding: 0 15px;
+            margin: 0 auto;
+        }
+
+        .header {
+            border-bottom: 1px solid #dee2e6;
+            margin-bottom: 40px;
+        }
+
+        .header__content {
+            padding: 17px 0;
+        }
+
+        .header__title {
+            font-size: 25px;
+            font-weight: 400;
+        }
+
+        .main {
+            display: flex;
+            justify-content: center;
+            padding: 0 5px;
+        }
+
+        .product {
+            background-image: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #dedede;
+        }
+
+        .product__img {
+            max-width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+
+        div.code {
+            text-align: center;
+        }
+
+        .product__info {
+            padding: 10px 15px;
+            border-bottom: 1px solid #dedede;
+        }
+
+        .product__info:last-child {
+            border: none;
+            padding: 15px 15px;
+        }
+
+        .product__copy {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .product__btn {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid #dedede;
+            background-color: transparent;
+            cursor: pointer;
+            padding: 10px 15px;
+            transition: all 0.3s linear;
+        }
+
+        .product__btn:hover {
+            border: 1px solid #000;
+            background-color: #000;
+            color: #fff;
+        }
+
+        .copy__alert {
+            background-color: #198754;
+            width: 200px;
+            border-radius: 0 0 10px 10px;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            font-weight: 700;
+
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translate(-50%, -100%);
+            transition: all 0.2s linear;
+        }
+
+        .copy__alert.show {
+            transform: translate(-50%, 0);
+        }
+        .center-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        }
+        .custom-button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        background-color: #007bff;
+        color: #fff;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .custom-button:hover {
+            background-color: #0056b3;
+        }
+        .custom-input {
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 100%;
+        box-sizing: border-box;
+        margin-bottom: 10px;
+        }
+        @media (max-width: 480px) {
+            .product__row span {
+                font-size: 15px;
+            }
+            .product__info {
+                padding: 10px 0 10px 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="container">
+        <div class="header__content">
+            <h1 class="header__title">SteamGift</h1>
+        </div>
+    </div>
+</header>
+<main class="main">
+    <div class="product">
+        <div class="product__info">
+            <div class="center-container">
+                <p>Ошибка, обратитесь к продавцу...</p>
+            </div>
+    </div>
+</main>
+<div class="copy__alert">
+    <p class="copy__alert-text">Текст скопирован</p>
+</div>
+</body>
+</html>
