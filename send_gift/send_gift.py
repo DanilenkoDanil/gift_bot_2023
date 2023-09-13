@@ -8,6 +8,7 @@ from selenium.webdriver.support.select import Select
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from background_task import background
+from pyvirtualdisplay import Display  # Импортируем библиотеку для виртуального дисплея
 
 
 def steam_login(driver, login: str, password: str):
@@ -138,64 +139,57 @@ def main_gift_send(login, password, target_name, game_link, sub_id, proxy, targe
     print('!!!!!!!!!!!!!!!!!!!!')
     print('Прокси тут')
     print(proxy)
-    # options = {
-    #     'proxy': {
-    #         'http': f'http://{proxy}',
-    #         'https': f'https://{proxy}',
-    #         'no_proxy': 'localhost,127.0.0.1'  # excludes
-    #     }
-    # }
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
-    chrome_options.add_argument('--proxy-server=%s' % proxy)
-    chrome_options.add_argument('--headless')
-    driver = webdriver.Chrome(chrome_options=chrome_options)
-    try:
-        steam_login(driver, login, password)
-        time.sleep(3)
-        gift_game(driver, game_link, sub_id, target_name)
-        code_obj.status = "Готово!"
-        code_obj.save()
+    # Запускаем виртуальный дисплей
+    with Display(visible=0, size=(1920, 1080)) as display:
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
+        chrome_options.add_argument('--proxy-server=%s' % proxy)
+        chrome_options.add_argument('--headless')
+        driver = webdriver.Chrome(chrome_options=chrome_options)
         try:
-            remove_friend(driver, target_link)
+            steam_login(driver, login, password)
+            time.sleep(3)
+            gift_game(driver, game_link, sub_id, target_name)
+            code_obj.status = "Готово!"
+            code_obj.save()
+            try:
+                remove_friend(driver, target_link)
+            except Exception as e:
+                print(e)
+                driver.quit()
+                return 'Error Remove'
         except Exception as e:
             print(e)
             driver.quit()
-            return 'Error Remove'
-    except Exception as e:
-        print(e)
-        driver.quit()
-        code_obj.status = "Ошибка, обратитесь к продавцу!"
-        code_obj.save()
-        return 'Error'
-    driver.quit()
-
+            code_obj.status = "Ошибка, обратитесь к продавцу!"
+            code_obj.save()
+            return 'Error'
 
 @background()
 def main_friend_add(login: str, password: str,  proxy: str, target_link: str, code):
     print(code)
     code_obj = get_key(code)
     print(code_obj)
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument('--headless')
-    chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
-    # chrome_options.add_argument('--proxy-server=%s' % proxy)
-    driver = webdriver.Chrome(chrome_options=chrome_options)
+    # Запускаем виртуальный дисплей
+    with Display(visible=0, size=(1920, 1080)) as display:
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument('--headless')
+        chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
+        # chrome_options.add_argument('--proxy-server=%s' % proxy)
+        driver = webdriver.Chrome(chrome_options=chrome_options)
 
-    try:
-        steam_login(driver, login, password)
-        time.sleep(3)
-        add_friend(driver, target_link)
-        code_obj.status = "Ожидаем принятия запроса"
-        code_obj.save()
-    except Exception as e:
-        print(e)
-        driver.quit()
-        code_obj.status = "Ссылка некорректна ожидаем замены"
-        code_obj.save()
-        return 'Error'
-
-    driver.quit()
+        try:
+            steam_login(driver, login, password)
+            time.sleep(3)
+            add_friend(driver, target_link)
+            code_obj.status = "Ожидаем принятия запроса"
+            code_obj.save()
+        except Exception as e:
+            print(e)
+            driver.quit()
+            code_obj.status = "Ссылка некорректна ожидаем замены"
+            code_obj.save()
+            return 'Error'
 
 
 # check_gift_status('raibartinar1970', 'LHtsrneGns1976', '6772uh:WHd7M4@5.101.83.130:8000', 'enormously', 'SUPERHOT VR')
