@@ -9,6 +9,7 @@ from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from background_task import background
 from pyvirtualdisplay import Display  # Импортируем библиотеку для виртуального дисплея
+from selenium.webdriver.chrome.service import Service
 
 
 def steam_login(driver, login: str, password: str):
@@ -145,7 +146,8 @@ def main_gift_send(login, password, target_name, game_link, sub_id, proxy, targe
         chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
         chrome_options.add_argument('--proxy-server=%s' % proxy)
         chrome_options.add_argument('--headless')
-        driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), chrome_options=chrome_options)
+        service = Service(executable_path=ChromeDriverManager().install())
+        driver = webdriver.Chrome(service=service, chrome_options=chrome_options)
         try:
             steam_login(driver, login, password)
             time.sleep(3)
@@ -176,7 +178,8 @@ def main_friend_add(login: str, password: str,  proxy: str, target_link: str, co
         chrome_options.add_argument('--headless')
         chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
         # chrome_options.add_argument('--proxy-server=%s' % proxy)
-        driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), chrome_options=chrome_options)
+        service = Service(executable_path=ChromeDriverManager().install())
+        driver = webdriver.Chrome(service=service, chrome_options=chrome_options)
 
         try:
             steam_login(driver, login, password)
