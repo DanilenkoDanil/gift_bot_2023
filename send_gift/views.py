@@ -55,7 +55,7 @@ class CheckFriendAPIView(generics.RetrieveAPIView):
         if key is False:
             return Response(f"Ваш код не действителен", status=status.HTTP_200_OK)
 
-        if 'ожидаем' not in key.status:
+        if 'ожидаем' not in key.status.lower():
             return Response(f"Ваш код не действителен", status=status.HTTP_200_OK)
 
         key.status = "Отправляем подарок..."
