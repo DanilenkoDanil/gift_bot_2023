@@ -132,54 +132,6 @@ def gift_game(driver, game_link, sub_id, friend_name):
         time.sleep(1)
 
 
-def check_gift_status(login: str, password: str, shared_secret: str, proxy: str, nickname: str, game_name: str):
-    print('!!!!!!!!!!!!!!!!!!!!')
-    print('Прокси тут')
-    print(proxy)
-    # options = {
-    #     'proxy': {
-    #         'http': f'http://{proxy}',
-    #         'https': f'https://{proxy}',
-    #         'no_proxy': 'localhost,127.0.0.1'  # excludes
-    #     }
-    # }
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
-    chrome_options.add_argument('--proxy-server=%s' % proxy)
-    chrome_options.add_argument('--headless')
-    driver = webdriver.Chrome(chrome_options=chrome_options)
-    try:
-        steam_login(driver, login, password, shared_secret)
-        time.sleep(3)
-
-        steam_id = driver.current_url.split('id/')[1]
-        driver.get(f'https://steamcommunity.com/id/{steam_id}/inventory/')
-        time.sleep(3)
-        driver.find_element(By.XPATH, '//*[@id="inventory_more_link"]').click()
-        time.sleep(0.5)
-        driver.find_element(By.XPATH, '//*[@id="inventory_more_dropdown"]/div/a[3]').click()
-        gifts = driver.find_element(By.XPATH, '//*[@id="tabcontent_pendinggifts"]').find_element(By.TAG_NAME, 'div')
-        for i in gifts:
-            try:
-                status_area = i.find_element(By.CLASS_NAME, 'gift_status_area')
-            except NoSuchElementException:
-                continue
-            print(status_area.text)
-            if nickname in status_area.find_element(By.TAG_NAME, 'a').text and game_name in i.text:
-                if 'Redeemed' in i.text:
-                    driver.quit()
-                    return 'Received'
-                elif 'Sent' in i.text:
-                    driver.quit()
-                    return 'Submitted'
-    except Exception as e:
-        print(e)
-        driver.quit()
-        return 'Error'
-    driver.quit()
-    return 'Rejected'
-
-
 @background()
 def main_gift_send(login, password, target_name, game_link, sub_id, proxy, target_link, code):
     code_obj = get_key(code)
@@ -197,7 +149,7 @@ def main_gift_send(login, password, target_name, game_link, sub_id, proxy, targe
     chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
     chrome_options.add_argument('--proxy-server=%s' % proxy)
     chrome_options.add_argument('--headless')
-    driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), chrome_options=chrome_options)
+    driver = webdriver.Chrome(chrome_options=chrome_options)
     try:
         steam_login(driver, login, password)
         time.sleep(3)
@@ -221,13 +173,14 @@ def main_gift_send(login, password, target_name, game_link, sub_id, proxy, targe
 
 @background()
 def main_friend_add(login: str, password: str,  proxy: str, target_link: str, code):
-    print('start')
+    print(code)
     code_obj = get_key(code)
+    print(code_obj)
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument('--headless')
     chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
     # chrome_options.add_argument('--proxy-server=%s' % proxy)
-    driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), chrome_options=chrome_options)
+    driver = webdriver.Chrome(chrome_options=chrome_options)
 
     try:
         steam_login(driver, login, password)
@@ -246,6 +199,6 @@ def main_friend_add(login: str, password: str,  proxy: str, target_link: str, co
 
 
 # check_gift_status('raibartinar1970', 'LHtsrneGns1976', '6772uh:WHd7M4@5.101.83.130:8000', 'enormously', 'SUPERHOT VR')
-# main_friend_add('ningendo771', 'vfczyz5391321212123456789S', '', 'https://steamcommunity.com/id/4560456/')
+# main_friend_add('ningendo771', 'vfczyz5391321212123456789S', '', 'https://steamcommunity.com/id/4560456/', 'asd')
 # main('ningendo771', 'vfczyz5391321212123456789S', '_TiTaN_BaLLs_', 'https://store.steampowered.com/app/1110910/Mortal_Shell/', '614771',
  #    '', 'https://steamcommunity.com/id/4560456/')

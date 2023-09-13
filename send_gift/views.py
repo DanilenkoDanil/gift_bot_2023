@@ -142,7 +142,7 @@ class SendGiftAPIView(generics.RetrieveAPIView):
                 )
                 try:
                     main_friend_add(account.login, account.password, '', info['username'], code)
-                    code_obj.status = "Ссылка заменена, ожидаем ответа на запрос в друзья..."
+                    code_obj.status = "Ожидаем ответа на запрос в друзья..."
                     code_obj.save()
                     image_link = convert_game_link_game_img(game.game_link)
                     context = {
