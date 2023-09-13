@@ -19,7 +19,7 @@
 				const urlParams = new URLSearchParams(window.location.search);
 				const uniquecode = urlParams.get('uniquecode'); // Получаем значение из параметра uniquecode в адресной строке
 
-				let requestUrl = 'http://' + currentUrl + ':8000/bot/' + endpoint;
+				let requestUrl = 'http://' + currentUrl + '/bot/' + endpoint;
 
 				if (requestUrl.includes('?')) {
 					// Если в адресной строке уже есть параметры, добавляем & перед uniquecode
