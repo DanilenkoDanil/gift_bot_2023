@@ -54,6 +54,10 @@ class CheckFriendAPIView(generics.RetrieveAPIView):
         key = get_key(code)
         if key is False:
             return Response(f"Ваш код не действителен", status=status.HTTP_200_OK)
+
+        if 'ожидаем' not in key.status:
+            return Response(f"Ваш код не действителен", status=status.HTTP_200_OK)
+
         key.status = "Отправляем подарок..."
         key.save()
 
