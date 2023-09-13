@@ -54,9 +54,9 @@ def check_code(code: str, guid: str = '22882862E75441D5B0DC400A77F4972D', seller
             if float(value) < 5:
                 value = result_json['cnt_goods']
         else:
-            value = result_json['cnt_goods']
+            value = result_json['id_goods']
     except IndexError:
-        value = result_json['cnt_goods']
+        value = result_json['id_goods']
     return {
         'retval': result_json['retval'],
         'username': result_json['options'][0]['value'],
@@ -66,5 +66,5 @@ def check_code(code: str, guid: str = '22882862E75441D5B0DC400A77F4972D', seller
 if __name__ == '__main__':
     # print(check_code('6E0F409D2F874551'))
     timer = time.time()
-    print(check_code('5A3B61F9E620430B', 'DCCE3E791272406C802364EFEBB85A39', 876867))
+    print(check_code('4B353051F13E48E2', '765BD01FD52D489C8EDF3E26CD88D453', 224269))
     print(time.time() - timer)

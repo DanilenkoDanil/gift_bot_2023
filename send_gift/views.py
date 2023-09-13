@@ -114,20 +114,15 @@ class SendGiftAPIView(generics.RetrieveAPIView):
         key = get_key(code)
 
         if key is False:
-            # try:
-            #     info = check_code(code=code, guid=setting.digi_code, seller_id=setting.seller_id)
-            # except Exception as e:
-            #     print(e)
-            #     print('no info')
-            #     return Response(f"Ваш код не действителен", status=status.HTTP_200_OK)
-
-            info = dict()
-            info['retval'] = 0
-            info['game'] = 113131
-            info['username'] = 'https://steamcommunity.com/id/4560456/'
+            try:
+                info = check_code(code=code, guid=setting.digi_code, seller_id=setting.seller_id)
+            except Exception as e:
+                print(e)
+                print('no info')
+                return render(request, 'main/403_error.html')
 
             if info['retval'] == 0:
-                game = get_game('113131')
+                game = get_game(info['value'])
                 account = get_account(game.type)
                 if account is False:
                     return render(request, 'main/403_error.html')
@@ -159,7 +154,7 @@ class SendGiftAPIView(generics.RetrieveAPIView):
                     code_obj.save()
                     return render(request, 'main/403_error.html')
             else:
-                return Response(f"Ваш код не действителен", status=status.HTTP_200_OK)
+                return render(request, 'main/403_error.html')
         else:
             image_link = convert_game_link_game_img(key.game.game_link)
             context = {
