@@ -137,4 +137,4 @@ def get_currency():
 # send_steam('sh33shka', 560, '5a6d1dac7d9455bed78462ab4858c8c1')
 # print(get_balance('yZGqhXRaHeeBH9D1BmV74gm2M2eQoIZt5vjOnUmptIX1NdXJC4'))
 # for i in range(1, 3):
-# send_steam_ozon('danilenko231', 100000, 'okhwhalpvuf10Y8EEMA-JhBPn1?ckHvZX9vatbpUrGlrB1')
+# send_steam_ozon('nike00474', 50000, 'okhwhalpvuf10Y8EEMA-JhBPn1?ckHvZX9vatbpUrGlrB1')

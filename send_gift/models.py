@@ -56,6 +56,11 @@ class Setting(models.Model):
     course = models.FloatField(default=0)
 
 
+class Log(models.Model):
+    message = models.TextField(unique=True)
+    date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+
+
 def get_key(key: str):
     try:
         return Code.objects.filter(code=key)[0]

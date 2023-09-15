@@ -81,10 +81,7 @@ class CheckFriendAPIView(generics.RetrieveAPIView):
         main_gift_send(
             key.account.login,
             key.account.password,
-            username,
-            key.game.game_link,
             key.game.game_sub_id,
-            '',
             key.link,
             key.code
         )
@@ -105,7 +102,7 @@ class ChangeLinkAPIView(generics.RetrieveAPIView):
             key.link = link
             key.counter += 1
             key.save()
-            main_friend_add(key.account.login, key.account.password, '', key.link, code)
+            main_friend_add(key.account.login, key.account.password, key.link, code)
             return Response(f"Успех", status=status.HTTP_200_OK)
         else:
             return Response(f"Недоступно", status=status.HTTP_200_OK)
@@ -140,8 +137,8 @@ class SendGiftAPIView(generics.RetrieveAPIView):
                     account=account
                 )
                 try:
-                    main_friend_add(account.login, account.password, '', info['username'], code)
-                    code_obj.status = "Ссылка заменена, ожидаем ответа на запрос в друзья..."
+                    main_friend_add(account.login, account.password, info['username'], code)
+                    code_obj.status = "Отправляем запрос в друзья..."
                     code_obj.save()
                     image_link = convert_game_link_game_img(game.game_link)
                     context = {
