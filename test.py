@@ -2,6 +2,7 @@ from steam.client import SteamClient
 import requests
 from bs4 import BeautifulSoup
 import json
+import time
 from steam.steamid import from_url
 from steam.steamid import SteamID
 from steam.client.builtins.friends import SteamFriendlist
@@ -35,8 +36,7 @@ def send_gift(username, password, sub_id, friend_profile_url):
         session.headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36'
         }
-        my_account_id = SteamID(client.session_id).account_id
-
+        time.sleep(3)
         cookies = requests.utils.dict_from_cookiejar(session.cookies)
         session_id = cookies['sessionid']
         friend_id = SteamID(from_url(friend_profile_url))
@@ -48,11 +48,8 @@ def send_gift(username, password, sub_id, friend_profile_url):
             "subid": sub_id
         }
         session.post('https://store.steampowered.com/cart/', data=payload)
-        session.get(f"https://store.steampowered.com/dynamicstore/userdata/?id={my_account_id}&cc=RU&v=20")
         cookies = requests.utils.dict_from_cookiejar(session.cookies)
         shopping_cart_id = cookies['shoppingCartGID']
-
-        session.get(f'https://checkout.steampowered.com/checkout/?purchasetype=gift&cart={shopping_cart_id}&snr=1_8_4__503')
 
         session_id = session.cookies.get('sessionid', domain='store.steampowered.com')
         session.cookies.set("beginCheckoutCart", shopping_cart_id, domain="checkout.steampowered.com", path='/checkout/')
@@ -81,16 +78,18 @@ def send_gift(username, password, sub_id, friend_profile_url):
 
             "sessionid": session_id,
         }
-
+        time.sleep(3)
         result = session.post('https://checkout.steampowered.com/checkout/inittransaction/', data=payload)
         trans_id = result.json()['transid']
-
+        time.sleep(2)
         session.get(f'https://checkout.steampowered.com/checkout/getfinalprice/?count=1&transid={trans_id}&purchasetype=gift&microtxnid=-1&cart={shopping_cart_id}&gidReplayOfTransID=-1')
         payload = {
             "transid": trans_id,
             "CardCVV2": ""
         }
+        time.sleep(3)
         result = session.post('https://checkout.steampowered.com/checkout/finalizetransaction/', data=payload)
+        print(result.json())
         if result.json()['success'] == 22:
             return True
         else:
@@ -103,6 +102,6 @@ def send_gift(username, password, sub_id, friend_profile_url):
 # add_steam_friend('ningendo771', 'vfczyz5391321212123456789S', "https://steamcommunity.com/id/4560456/")
 # send_gift('ningendo771', 'vfczyz5391321212123456789S', 19007, "https://steamcommunity.com/id/4560456/")
 # print(from_url("https://steamcommunity.com/profiles/76561198869370979/"))
-
+# send_gift("gruschenkancy3", "GODARO52@12KNa97", "19007", "https://steamcommunity.com/id/4560456/")
 
 # '5860927758080536870'
