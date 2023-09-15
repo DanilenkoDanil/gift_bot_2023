@@ -9,11 +9,24 @@ import requests
 import time
 
 
+def copy_cookies(session):
+    source_domain = 'store.steampowered.com'
+    source_cookies = session.cookies.get_dict(domain=source_domain)
+
+    # Установите куки на другой домен (например, checkout.steampowered.com)
+    target_domain = 'checkout.steampowered.com'
+    for name, value in source_cookies.items():
+        secure = (name == 'steamLoginSecure')
+        session.cookies.set(name, value, domain=target_domain, secure=secure)
+    return session
+
+
 def send_gift(username, password, sub_id, friend_profile_url):
     try:
         client = SteamClient()
         client.login(username=username, password=password)
         session = client.get_web_session()
+        session = copy_cookies(session)
         session.headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36'
         }

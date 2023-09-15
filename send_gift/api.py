@@ -66,5 +66,5 @@ def check_code(code: str, guid: str = '22882862E75441D5B0DC400A77F4972D', seller
 if __name__ == '__main__':
     # print(check_code('6E0F409D2F874551'))
     timer = time.time()
-    print(check_code('4B353051F13E48E2', '765BD01FD52D489C8EDF3E26CD88D453', 224269))
+    print(check_code('9C99914A2BD74C6C', '765BD01FD52D489C8EDF3E26CD88D453', 224269))
     print(time.time() - timer)
