@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Code, Setting, Interhub, TypeAccount, Account, Game
+from .models import Code, Setting, Interhub, TypeAccount, Account, Game, Log
 
 
 @admin.register(Code)
@@ -12,6 +12,11 @@ class CodeAdmin(admin.ModelAdmin):
 class CodeAdmin(admin.ModelAdmin):
     list_display = ('name', 'game_id', 'type', "amount")
     search_fields = ('game_id',)
+
+
+@admin.register(Log)
+class CodeAdmin(admin.ModelAdmin):
+    list_display = ('date',)
 
 
 @admin.register(TypeAccount)
