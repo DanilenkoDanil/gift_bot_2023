@@ -58,7 +58,7 @@ class CheckFriendAPIView(generics.RetrieveAPIView):
         if 'ожидаем' not in key.status.lower():
             return Response(f"Ваш код не действителен", status=status.HTTP_200_OK)
 
-        key.status = "Отправляем подарок..."
+        key.status = "Отправляем подарок"
         key.save()
 
         username = get_steam_profile_name(key.link)
