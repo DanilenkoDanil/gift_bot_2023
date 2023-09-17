@@ -38,7 +38,7 @@ class Code(models.Model):
     link = models.CharField(max_length=200)
     error = models.TextField()
     counter = models.IntegerField(default=0)
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, null=True, blank=True, on_delete=models.SET_NULL)
     date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
     def __str__(self):
