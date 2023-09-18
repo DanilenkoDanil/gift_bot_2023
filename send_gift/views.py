@@ -67,14 +67,20 @@ class CheckFriendAPIView(generics.RetrieveAPIView):
             key.save()
             return Response(f"Ссылка не подходит", status=status.HTTP_200_OK)
 
-        try:
-            new_amount = key.game.amount * setting.course
-            balance_up(key.account.login, new_amount)
-        except Exception as e:
-            print(e)
-            key.status = "Ошибка, обратитесь к продавцу!"
-            key.save()
-            return Response(f"Error", status=status.HTTP_200_OK)
+        if key.account.balance < key.game.amount:
+            try:
+                new_amount = (key.game.amount - key.account.balance) * setting.course
+                balance_up(key.account.login, new_amount)
+                key.account.balance = 0
+                key.account.save()
+            except Exception as e:
+                print(e)
+                key.status = "Ошибка, обратитесь к продавцу!"
+                key.save()
+                return Response(f"Error", status=status.HTTP_200_OK)
+        else:
+            key.account.balance -= key.game.amount
+            key.account.save()
 
         key.account.counter += 1
         key.account.save()

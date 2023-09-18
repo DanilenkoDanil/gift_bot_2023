@@ -26,6 +26,7 @@ class Account(models.Model):
     type = models.ForeignKey(TypeAccount, on_delete=models.CASCADE)
     counter = models.PositiveIntegerField(default=0)
     status = models.BooleanField(default=True)
+    balance = models.FloatField(default=0)
 
     def __str__(self):
         return self.login

@@ -62,6 +62,7 @@ def send_gift(username, password, sub_id, friend_profile_url):
         }
         session.post('https://store.steampowered.com/cart/', data=payload)
         cookies = requests.utils.dict_from_cookiejar(session.cookies)
+        print(cookies)
         shopping_cart_id = cookies['shoppingCartGID']
 
         session_id = session.cookies.get('sessionid', domain='store.steampowered.com')
@@ -115,6 +116,6 @@ def send_gift(username, password, sub_id, friend_profile_url):
 # add_steam_friend('ningendo771', 'vfczyz5391321212123456789S', "https://steamcommunity.com/id/4560456/")
 # send_gift('ningendo771', 'vfczyz5391321212123456789S', 19007, "https://steamcommunity.com/id/4560456/")
 # print(from_url("https://steamcommunity.com/profiles/76561198869370979/"))
-# send_gift("gruschenkancy3", "GODARO52@12KNa97", "19007", "https://steamcommunity.com/id/4560456/")
+send_gift("nike00474", "M69Y9M69Y9", "244390", "https://steamcommunity.com/id/mraasgeier/")
 
 # '5860927758080536870'
