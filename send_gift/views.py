@@ -83,7 +83,8 @@ class CheckFriendAPIView(generics.RetrieveAPIView):
             key.account.password,
             key.game.game_sub_id,
             key.link,
-            key.code
+            key.code,
+            schedule=120
         )
         return Response(f"Успех", status=status.HTTP_200_OK)
 
