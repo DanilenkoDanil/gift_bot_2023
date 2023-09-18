@@ -57,7 +57,7 @@ class Setting(models.Model):
 
 
 class Log(models.Model):
-    message = models.TextField(unique=True)
+    message = models.TextField()
     date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
 

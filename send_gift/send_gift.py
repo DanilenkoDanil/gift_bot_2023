@@ -106,8 +106,14 @@ def main_gift_send(login, password, sub_id, target_link, code):
         code_obj.status = "Готово!"
         code_obj.save()
     else:
-        code_obj.status = "Ошибка, обратитесь к продавцу!"
-        code_obj.save()
+        if code_obj.counter < 1:
+            code_obj.counter += 1
+            code_obj.status = "Процесс отправки..."
+            code_obj.save()
+            main_gift_send(login, password, sub_id, target_link, code, schedule=120)
+        else:
+            code_obj.status = "Ошибка, обратитесь к продавцу!"
+            code_obj.save()
         return 'Error'
 
 
