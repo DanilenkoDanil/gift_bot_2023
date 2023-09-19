@@ -13,15 +13,16 @@ def copy_cookies(session):
     source_domain = 'store.steampowered.com'
     source_cookies = session.cookies.get_dict(domain=source_domain)
 
-    # Установите куки на другой домен (например, checkout.steampowered.com)
     target_domain = 'checkout.steampowered.com'
     for name, value in source_cookies.items():
         secure = (name == 'steamLoginSecure')
         session.cookies.set(name, value, domain=target_domain, secure=secure)
+
     return session
 
 
 def send_gift(username, password, sub_id, friend_profile_url):
+    status = 0
     try:
         client = SteamClient()
         client.login(username=username, password=password)
@@ -86,14 +87,19 @@ def send_gift(username, password, sub_id, friend_profile_url):
         }
         time.sleep(3)
         result = session.post('https://checkout.steampowered.com/checkout/finalizetransaction/', data=payload).json()
+        status = 1
         print(result)
         if int(result['success']) == 22:
             return True
         else:
             return False
     except Exception as e:
-        print(e)
-        Log.objects.create(message=e)
+        cookies = requests.utils.dict_from_cookiejar(session.cookies)
+        if status == 1:
+            log_message = str(cookies) + "\n" + str(e) + "\n" + result
+        else:
+            log_message = str(cookies) + "\n" + str(e)
+        Log.objects.create(message=log_message)
         return False
 
 
