@@ -43,7 +43,8 @@ def send_gift(username, password, sub_id, friend_profile_url):
             "sessionid": session_id,
             "subid": sub_id
         }
-        session.post('https://store.steampowered.com/cart/', data=payload)
+        cart = session.post('https://store.steampowered.com/cart/', data=payload)
+        status = 1
         cookies = requests.utils.dict_from_cookiejar(session.cookies)
         shopping_cart_id = cookies['shoppingCartGID']
 
@@ -87,7 +88,7 @@ def send_gift(username, password, sub_id, friend_profile_url):
         }
         time.sleep(3)
         result = session.post('https://checkout.steampowered.com/checkout/finalizetransaction/', data=payload).json()
-        status = 1
+        status = 2
         print(result)
         if int(result['success']) == 22:
             return True
@@ -95,10 +96,12 @@ def send_gift(username, password, sub_id, friend_profile_url):
             return False
     except Exception as e:
         cookies = requests.utils.dict_from_cookiejar(session.cookies)
-        if status == 1:
-            log_message = str(cookies) + "\n" + str(e) + "\n" + result
+        if status == 2:
+            log_message = "Status 2" + str(cookies) + "\n" + str(e) + "\n" + result
+        elif status == 1:
+            log_message = "Status 1" + str(cookies) + "\n" + str(e) + "\n" + str(cart.content)
         else:
-            log_message = str(cookies) + "\n" + str(e)
+            log_message = "Status 0" + str(cookies) + "\n" + str(e)
         Log.objects.create(message=log_message)
         return False
 
