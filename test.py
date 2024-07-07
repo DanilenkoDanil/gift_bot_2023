@@ -113,9 +113,9 @@ def send_gift(username, password, sub_id, friend_profile_url):
         return False
 
 
-# add_steam_friend('ningendo771', 'vfczyz5391321212123456789S', "https://steamcommunity.com/id/4560456/")
+# add_steam_friend('098samch', 'nzBVFLO0', "https://steamcommunity.com/id/Dessly")
 # send_gift('ningendo771', 'vfczyz5391321212123456789S', 19007, "https://steamcommunity.com/id/4560456/")
 # print(from_url("https://steamcommunity.com/profiles/76561198869370979/"))
-send_gift("nike00474", "M69Y9M69Y9", "244390", "https://steamcommunity.com/id/mraasgeier/")
+send_gift("098samch", "nzBVFLO0", "910066", "https://steamcommunity.com/id/Dessly")
 
 # '5860927758080536870'

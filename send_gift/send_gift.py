@@ -99,7 +99,7 @@ def send_gift(username, password, sub_id, friend_profile_url):
         if status == 2:
             log_message = "Status 2" + str(cookies) + "\n" + str(e) + "\n" + result
         elif status == 1:
-            log_message = "Status 1" + str(cookies) + "\n" + str(e) + "\n" + str(cart.content)
+            log_message = "Status 1" + str(cookies) + "\n" + str(e) + "\n" + str(cart.content.decode("utf-8"))
         else:
             log_message = "Status 0" + str(cookies) + "\n" + str(e)
         Log.objects.create(message=log_message)
